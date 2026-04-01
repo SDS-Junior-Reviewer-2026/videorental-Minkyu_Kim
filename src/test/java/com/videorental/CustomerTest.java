@@ -107,6 +107,15 @@ public class CustomerTest {
                 + "You earned 4 frequent renter pointers");
     }
 
+    @Test
+    void setPriceCode() {
+        Movie movie = new Movie("TITLE_NOT_IMPORTANT", Movie.REGULAR);
+
+        movie.setPriceCode(Movie.NEW_RELEASE);
+
+        assertThat(movie.getPriceCode()).isEqualTo(Movie.NEW_RELEASE);
+    }
+
 
     private static Rental createRentalFor(int priceCode, int daysRented) {
         Movie movie = new Movie(TITLE, priceCode);
