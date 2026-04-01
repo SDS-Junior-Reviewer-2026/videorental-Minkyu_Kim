@@ -92,9 +92,9 @@ public class CustomerTest {
 
     @Test
     public void statementForFewMovieRental() {
-        Movie regularMovie = new Movie(TITLE, Movie.REGULAR);
-        Movie newReleaseMovie = new Movie(TITLE, Movie.NEW_RELEASE);
-        Movie childrensMovie = new Movie(TITLE, Movie.CHILDRENS);
+        Movie regularMovie = getMovie(Movie.REGULAR);
+        Movie newReleaseMovie = getMovie(Movie.NEW_RELEASE);
+        Movie childrensMovie = getMovie(Movie.CHILDRENS);
         customer.addRental(new Rental(regularMovie, 1));
         customer.addRental(new Rental(newReleaseMovie, 4));
         customer.addRental(new Rental(childrensMovie, 4));
@@ -109,7 +109,8 @@ public class CustomerTest {
 
     @Test
     void setPriceCode() {
-        Movie movie = new Movie("TITLE_NOT_IMPORTANT", Movie.REGULAR);
+        //Movie movie = new Movie("TITLE_NOT_IMPORTANT", Movie.REGULAR);
+        Movie movie = getMovie(Movie.REGULAR);
 
         movie.setPriceCode(Movie.NEW_RELEASE);
 
@@ -117,10 +118,21 @@ public class CustomerTest {
     }
 
 
-    private static Rental createRentalFor(int priceCode, int daysRented) {
-        Movie movie = new Movie(TITLE, priceCode);
-        Rental rental = new Rental(movie, daysRented);
-        return rental;
+    private Rental createRentalFor(int priceCode, int daysRented) {
+        Movie movie = getMovie(priceCode);
+        return new Rental(movie, daysRented);
     }
 
+    private Movie getMovie(int priceCode) {
+        switch (priceCode){
+            case Movie.REGULAR:
+                return new RegularMovie(TITLE);
+            case Movie.NEW_RELEASE:
+                return new NewReleaseMovie(TITLE);
+            case Movie.CHILDRENS:
+                return new ChildrenMovie(TITLE);
+            default :
+                return null;
+        }
+    }
 }
