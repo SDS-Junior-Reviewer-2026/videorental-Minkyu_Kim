@@ -21,7 +21,6 @@ class Customer {
 	}
 
 	public String statement() {
-		double totalAmount = 0;
 		int frequentRenterPoints = 0;
 		Iterator<Rental> iterator = rentals.iterator();
 		String result = "Rental Record for " + getName() + "\n";
@@ -30,24 +29,7 @@ class Customer {
 			Rental each = (Rental) iterator.next();
 			// determine amounts for each line
 
-			double thisAmount = 0;
-			switch (each.getMovie().getPriceCode()) {
-			case Movie.REGULAR:
-				thisAmount += 2;
-				if (each.getDaysRented() > 2)
-					thisAmount += (each.getDaysRented() - 2) * 1.5;
-				break;
-				
-			case Movie.NEW_RELEASE:
-				thisAmount += each.getDaysRented() * 3;
-				break;
-				
-			case Movie.CHILDRENS:
-				thisAmount += 1.5;
-				if (each.getDaysRented() > 3)
-					thisAmount += (each.getDaysRented() - 3) * 1.5;
-				break;
-			}
+			//double thisAmount = each.getCharge();
 
 			// add frequent renter points
 			frequentRenterPoints++;
@@ -55,14 +37,20 @@ class Customer {
 			if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
 				frequentRenterPoints++;
 			// show figures
-			result += "\t" +  String.valueOf(thisAmount) + "(" + each.getMovie().getTitle() + ")" + "\n";
-
-			totalAmount += thisAmount;
+			result += "\t" +  String.valueOf(each.getCharge()) + "(" + each.getMovie().getTitle() + ")" + "\n";
 		}
 
-		result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
+		result += "Amount owed is " + getTotalAmount() + "\n";
 		result += "You earned " + String.valueOf(frequentRenterPoints) + " frequent renter pointers";
 
 		return result;
+	}
+
+	private double getTotalAmount() {
+		double totalAmount = 0;
+		for(Rental rental : rentals) {
+			totalAmount += rental.getCharge();
+		}
+		return totalAmount;
 	}
 }
